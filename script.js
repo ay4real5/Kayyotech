@@ -133,6 +133,132 @@
   }
 
   /* ══════════════════════════════════════════
+     4A. TYPED HERO TEXT
+  ══════════════════════════════════════════ */
+  const typedEl = document.getElementById('typed-line');
+  if (typedEl) {
+    const phrases = [
+      'Workflow Automation',
+      'Custom Web Apps',
+      'Internal Dashboards',
+      'System Integrations',
+      'Client Portals',
+      'Smarter Operations',
+    ];
+    let pIdx = 0, cIdx = 0, deleting = false;
+    const TYPE_SPEED   = 68;
+    const DELETE_SPEED = 34;
+    const PAUSE_END    = 2200;
+    const PAUSE_START  = 400;
+
+    function typeStep() {
+      const phrase = phrases[pIdx];
+      if (!deleting) {
+        typedEl.textContent = phrase.slice(0, ++cIdx);
+        if (cIdx === phrase.length) {
+          deleting = true;
+          setTimeout(typeStep, PAUSE_END);
+          return;
+        }
+        setTimeout(typeStep, TYPE_SPEED);
+      } else {
+        typedEl.textContent = phrase.slice(0, --cIdx);
+        if (cIdx === 0) {
+          deleting = false;
+          pIdx = (pIdx + 1) % phrases.length;
+          setTimeout(typeStep, PAUSE_START);
+          return;
+        }
+        setTimeout(typeStep, DELETE_SPEED);
+      }
+    }
+    setTimeout(typeStep, 900);
+  }
+
+  /* ══════════════════════════════════════════
+     4B. MOUSE PARALLAX — hero glow
+  ══════════════════════════════════════════ */
+  const heroGlow = document.querySelector('.hero-glow');
+  if (heroGlow) {
+    document.addEventListener('mousemove', e => {
+      const xPct = (e.clientX / window.innerWidth  - 0.5) * 60;
+      const yPct = (e.clientY / window.innerHeight - 0.5) * 60;
+      heroGlow.style.transform = `translate(${xPct}px, ${yPct}px)`;
+    }, { passive: true });
+  }
+
+  /* ══════════════════════════════════════════
+     4C. CURSOR SPOTLIGHT
+  ══════════════════════════════════════════ */
+  const spotlight = document.getElementById('cursor-spotlight');
+  if (spotlight) {
+    let spotX = 0, spotY = 0, rafSpot;
+    document.addEventListener('mousemove', e => {
+      spotX = e.clientX;
+      spotY = e.clientY;
+      spotlight.classList.add('active');
+      cancelAnimationFrame(rafSpot);
+      rafSpot = requestAnimationFrame(() => {
+        spotlight.style.left = spotX + 'px';
+        spotlight.style.top  = spotY + 'px';
+      });
+    }, { passive: true });
+    document.addEventListener('mouseleave', () => spotlight.classList.remove('active'));
+  }
+
+  /* ══════════════════════════════════════════
+     4D. SCROLL SPY — active nav link
+  ══════════════════════════════════════════ */
+  const sections   = document.querySelectorAll('section[id], div[id]');
+  const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+
+  const spyObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navAnchors.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.35 });
+
+  sections.forEach(s => spyObs.observe(s));
+
+  /* ══════════════════════════════════════════
+     4E. 3D CARD TILT
+  ══════════════════════════════════════════ */
+  const MAX_TILT   = 9;   // degrees
+  const SCALE_UP   = 1.03;
+
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    const shine = card.querySelector('.tilt-shine');
+
+    card.addEventListener('mousemove', e => {
+      const rect  = card.getBoundingClientRect();
+      const cx    = rect.left + rect.width  / 2;
+      const cy    = rect.top  + rect.height / 2;
+      const dx    = (e.clientX - cx) / (rect.width  / 2);
+      const dy    = (e.clientY - cy) / (rect.height / 2);
+      const rotX  = -dy * MAX_TILT;
+      const rotY  =  dx * MAX_TILT;
+
+      card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(${SCALE_UP})`;
+
+      if (shine) {
+        const shineX = ((e.clientX - rect.left) / rect.width)  * 100;
+        const shineY = ((e.clientY - rect.top)  / rect.height) * 100;
+        shine.style.background = `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255,255,255,0.1), transparent 65%)`;
+      }
+    }, { passive: true });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      if (shine) shine.style.background = '';
+    });
+  });
+
+  /* ══════════════════════════════════════════
      4. INTERSECTION OBSERVER — reveal + stat bars + counters
   ══════════════════════════════════════════ */
   function easeOut(t) { return 1 - Math.pow(1 - t, 3); }

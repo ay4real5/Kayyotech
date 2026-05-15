@@ -913,6 +913,66 @@ input::placeholder, textarea::placeholder { color: var(--text-subtle); }
 }
 .footer-links a:hover { color: var(--teal); }
 
+/* ── Cursor Spotlight ── */
+.cursor-spotlight {
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(58,175,169,0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s ease;
+  opacity: 0;
+  top: 0; left: 0;
+}
+.cursor-spotlight.active { opacity: 1; }
+[data-theme="dark"] .cursor-spotlight {
+  background: radial-gradient(circle, rgba(58,175,169,0.10) 0%, transparent 70%);
+}
+
+/* ── Typed text cursor ── */
+#typed-line::after {
+  content: '|';
+  color: var(--teal-light);
+  animation: blink 0.85s step-end infinite;
+  margin-left: 2px;
+  font-weight: 300;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Active nav link ── */
+.nav-links a.active {
+  color: var(--text);
+  background: rgba(27,42,107,0.07);
+}
+[data-theme="dark"] .nav-links a.active {
+  color: var(--teal-light);
+  background: rgba(58,175,169,0.1);
+}
+
+/* ── 3D card tilt ── */
+.tilt-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.08s linear, box-shadow var(--t);
+}
+.tilt-card .tilt-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08), transparent 65%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1;
+}
+.tilt-card:hover .tilt-shine { opacity: 1; }
+
 /* ── Reveal animations ── */
 .reveal {
   opacity: 0;
