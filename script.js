@@ -138,12 +138,12 @@
   const typedEl = document.getElementById('typed-line');
   if (typedEl) {
     const phrases = [
-      'Workflow Automation',
-      'Custom Web Apps',
-      'Internal Dashboards',
-      'System Integrations',
-      'Client Portals',
-      'Smarter Operations',
+      'Work Smarter',
+      'Serve Faster',
+      'Grow Better',
+      'Automate More',
+      'Never Miss a Call',
+      'Attract More Customers',
     ];
     let pIdx = 0, cIdx = 0, deleting = false;
     const TYPE_SPEED   = 68;
