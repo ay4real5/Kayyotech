@@ -1,4 +1,4 @@
-/* Kayyotech Solutions — script.js v2 */
+/* Kayyotech — script.js v2 */
 (function () {
   'use strict';
 
